@@ -1,0 +1,12 @@
+- name: get all files from project
+  uri:
+    url: https://gitlab.com/api/v4/projects/{{ gitlab_project_id }}/repository/tree
+    status_code: 200
+    body_format: json
+    return_content: yes
+  register: response
+- debug:
+    var: response.json
+- name: get the id name
+  set_fact:
+    test_id: "{{ response.json | regex_findall('\\:\\s+([^,]*)') }}"
